@@ -27,6 +27,8 @@ export async function getMedicalResponse(
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Origin': 'https://ct-gpt.vercel.app'
+
       },
       body: JSON.stringify({
         query: userMessage,
