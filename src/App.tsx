@@ -10,7 +10,7 @@ function App() {
   const { messages, isLoading, sendMessage, currentLanguage, setLanguage } = useChat();
 
   return (
-    <div className="h-screen flex flex-col bg-gray-100">
+    <div className="h-screen flex flex-col bg-gray-100 ">
       {/* Fixed Header */}
       <header className="bg-white border-b border-gray-200 flex-none">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
@@ -53,7 +53,7 @@ function App() {
       {/* Fixed Footer */}
       <footer className="bg-white border-t border-gray-200 flex-none">
         <div className="max-w-4xl mx-auto px-4 py-4 text-center text-sm text-gray-600">
-          Clinical Trac GPT © {new Date().getFullYear()} - AI-Powered Medical Assistant
+          Clinical Trac GPT © {new Date().getFullYear()} - AI-Powered by onPoint  Software Service 
         </div>
       </footer>
     </div>

@@ -32,13 +32,13 @@ export function ChatWindow({ messages, isLoading }: ChatWindowProps) {
           <ChatMessage key={message.id} message={message} />
         ))}
         {isLoading && (
-          <div className="flex gap-4 p-4 bg-gray-50">
+          <div className="flex gap-4 p-4  bg-gray-50">
             <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center">
               <div className="w-5 h-5 flex items-center justify-center">
                 <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
               </div>
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 pt-2">
               <div className="w-2 h-2 bg-gray-300 rounded-full animate-bounce" />
               <div className="w-2 h-2 bg-gray-300 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
               <div className="w-2 h-2 bg-gray-300 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }} />

@@ -1,18 +1,26 @@
-import { Message } from '../types/chat';
+import { Message, SourceDetail } from '../types/chat';
 
-const AI_QUERY_API_URL = 'https://ai-query.onpointsoft.com/api';
+// const AI_QUERY_API_URL = 'https://ai-query.onpointsoft.com/api';
 
+const AI_QUERY_API_URL = 'http://192.168.1.14:5001/api';
 interface AIQueryResponse {
   response: string;
   error?: string;
-}
+}                         
 
-export async function getMedicalResponse(userMessage: string, language: string): Promise<Message> {
+export async function getMedicalResponse(
+  userMessage: string,
+  language: string,
+  collectionName: string,
+  source_details?: SourceDetail[]
+): Promise<Message> {
   try {
     console.log('Sending request to API:', {
       url: AI_QUERY_API_URL,
       message: userMessage,
       language,
+      collectionName,
+      source_details,
     });
 
     const response = await fetch(AI_QUERY_API_URL, {
@@ -23,6 +31,7 @@ export async function getMedicalResponse(userMessage: string, language: string):
       body: JSON.stringify({
         query: userMessage,
         language: language,
+        collection_name: "ct", // Include collection_name in the request
       }),
     });
 
@@ -53,6 +62,8 @@ export async function getMedicalResponse(userMessage: string, language: string):
       role: 'assistant',
       timestamp: new Date(),
       language,
+      source_details: data.source_details || [], // Handle undefined or missing source_details
+
     };
   } catch (error) {
     console.error('Error calling AI Query API:', error);
@@ -68,3 +79,4 @@ export async function getMedicalResponse(userMessage: string, language: string):
     };
   }
 }
+

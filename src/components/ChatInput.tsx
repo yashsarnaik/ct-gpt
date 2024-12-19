@@ -1,4 +1,4 @@
-import React, { useState, KeyboardEvent } from 'react';
+import React, { useState, KeyboardEvent, useRef, useEffect } from 'react';
 import { Send, Mic, MicOff } from 'lucide-react';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import 'regenerator-runtime/runtime';
@@ -24,6 +24,14 @@ export function ChatInput({ onSendMessage, disabled, language }: ChatInputProps)
     }
   }, [transcript]);
 
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    // Focus input when component mounts or disabled state changes to false
+    if (!disabled && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [disabled]);
   const handleSubmit = () => {
     if (input.trim() && !disabled) {
       onSendMessage(input.trim());
@@ -57,12 +65,13 @@ export function ChatInput({ onSendMessage, disabled, language }: ChatInputProps)
         <div className="flex gap-2 max-w-4xl mx-auto">
           <textarea
             className="flex-1 resize-none rounded-lg border border-gray-300 p-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none min-h-[60px]"
-            placeholder="Type your medical query here..."
+            placeholder="Type your  query here..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyPress}
             disabled={disabled}
             rows={1}
+            ref={inputRef}
           />
           <button
             onClick={handleSubmit}
@@ -80,13 +89,14 @@ export function ChatInput({ onSendMessage, disabled, language }: ChatInputProps)
     <div className="border-t border-gray-200 bg-white p-4">
       <div className="flex gap-2 max-w-4xl mx-auto">
         <textarea
-          className="flex-1 resize-none rounded-lg border border-gray-300 p-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none min-h-[60px]"
-          placeholder="Type your medical query here..."
+          className="flex-1 resize-none rounded-lg border border-gray-300 p-3 focus:border-gray-400 focus:ring-1 focus:ring-gray-400 focus:outline-none min-h-[50px]"
+          placeholder="Type your  query here..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyPress}
           disabled={disabled}
           rows={1}
+          ref={inputRef}
         />
         <div className="flex items-center gap-2">
           <button
