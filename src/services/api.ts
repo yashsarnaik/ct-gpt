@@ -25,9 +25,10 @@ export async function getMedicalResponse(
 
     const response = await fetch(AI_QUERY_API_URL, {
       method: 'POST',
+     credentials: 'include',  // Required when allow_credentials is True
+
       headers: {
         'Content-Type': 'application/json',
-        'Origin': 'https://ct-gpt.vercel.app'
 
       },
       body: JSON.stringify({
