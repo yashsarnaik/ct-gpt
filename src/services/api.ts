@@ -2,7 +2,7 @@ import { Message, SourceDetail } from '../types/chat';
 
 // const AI_QUERY_API_URL = 'https://ai-query.onpointsoft.com/api';
 
-// const AI_QUERY_API_URL = 'http://192.168.1.14:5001/api';
+const AI_QUERY_API_URL = 'http://192.168.1.14:8000/api';
 interface AIQueryResponse {
   response: string;
   error?: string;
@@ -31,7 +31,7 @@ export async function getMedicalResponse(
       body: JSON.stringify({
         query: userMessage,
         language: language,
-        collection_name: "ct", // Include collection_name in the request
+        collection_name: "clinicaltrac", 
       }),
     });
 
