@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Bot, Link, Volume2, VolumeX } from 'lucide-react'; 
+import { Bot, Link, Volume2, VolumeX } from 'lucide-react';
 import { Message } from '../types/chat';
 import { formatMessageTime } from '../utils/dateFormat';
 
@@ -12,6 +12,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
 
   const [speakerOn, setSpeakerOn] = useState(false); // State to control speaker on/off
+
   useEffect(() => {
     const loadVoices = () => {
       const allVoices = speechSynthesis.getVoices();
@@ -20,7 +21,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
 
     // Wait for voices to be loaded
     speechSynthesis.onvoiceschanged = loadVoices;
-    
+
     // Initial voices load
     loadVoices();
   }, []);
@@ -29,7 +30,6 @@ export function ChatMessage({ message }: ChatMessageProps) {
     setSpeakerOn(!speakerOn);
 
     if (!speakerOn && isAssistant) {
-      // Prioritize Google's female voice if available
       const googleFemaleVoice = voices.find(
         (voice) =>
           voice.name.includes('Google') &&
@@ -37,23 +37,50 @@ export function ChatMessage({ message }: ChatMessageProps) {
           voice.name.toLowerCase().includes('female')
       );
 
-      // If the desired voice is not available, use a fallback voice
-      const targetVoice = googleFemaleVoice || 
-                          voices.find((voice) => voice.lang.startsWith('en-US')) || 
-                          voices[0]; // Fallback to first available voice
+      const targetVoice =
+        googleFemaleVoice ||
+        voices.find((voice) => voice.lang.startsWith('en-US')) ||
+        voices[0];
 
       const utterance = new SpeechSynthesisUtterance(message.content);
-      utterance.lang = 'en-US'; // Language code
-      utterance.voice = targetVoice; // Use the selected voice
-      utterance.rate = 1; // Normal speaking rate
-      utterance.pitch = 1; // Normal pitch
+      utterance.lang = 'en-US';
+      utterance.voice = targetVoice;
+      utterance.rate = 1;
+      utterance.pitch = 1;
 
       speechSynthesis.speak(utterance);
     } else {
-      speechSynthesis.cancel(); // Stop speech synthesis
+      speechSynthesis.cancel();
     }
   };
+
+  // Function to convert text with URLs into clickable links
+  const renderMessageContent = (content: string) => {
+    const urlRegex = /(?:https?:\/\/|www\.)[^\s/$.?#].[^\s]*/gi;
+    const parts = content.split(urlRegex);
+    const urls = content.match(urlRegex);
   
+    if (!urls) return content;
+  
+    return parts.reduce((acc: React.ReactNode[], part, i) => {
+      acc.push(<span key={`text-${i}`}>{part}</span>);
+      if (urls[i]) {
+        const link = urls[i].startsWith('www.') ? `https://${urls[i]}` : urls[i];
+        acc.push(
+          <a
+            key={`link-${i}`}
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 hover:underline"
+          >
+            {urls[i]}
+          </a>
+        );
+      }
+      return acc;
+    }, []);
+  };
   
 
   return (
@@ -93,7 +120,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
                 : 'bg-blue-600 text-white rounded-tr-none'
             }`}
           >
-            {message.content}
+            {renderMessageContent(message.content)}
             {isAssistant && message.source_details && message.source_details.length > 0 && (
               <div className="mt-3 pt-3 border-t border-gray-200">
                 <div className="text-sm text-gray-600 font-medium mb-1">Sources:</div>
