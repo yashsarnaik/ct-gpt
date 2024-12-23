@@ -126,23 +126,34 @@ export function ChatMessage({ message }: ChatMessageProps) {
                 <div className="text-sm text-gray-600 font-medium mb-1">Sources:</div>
                 <div className="space-y-1">
                   {message.source_details.map((source, index) => (
-                    <div key={index} className="flex items-center gap-1 text-sm">
-                      <Link className="w-4 h-4" />
-                      {source.metadata.url ? (
-                        <a
-                          href={source.metadata.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 hover:underline"
-                        >
-                          {source.metadata.url}
-                        </a>
-                      ) : (
-                        <span className="text-gray-500">
-                          {source.metadata.domain || 'Local source'}
-                        </span>
-                      )}
-                    </div>
+               <div key={index} className="flex items-center gap-1 text-sm">
+               <Link className="w-4 h-4" />
+               {source.metadata.url ? (
+                 <a
+                   href={
+                     source.metadata.url.startsWith('http') 
+                       ? source.metadata.url 
+                       : `https://${source.metadata.url}`
+                   }
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   className="text-blue-600 hover:underline"
+                 >
+                   {source.metadata.url}
+                 </a>
+               ) : (
+                 <a
+                   href={`https://${source.metadata.domain}`}
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   className="text-blue-500 hover:underline"
+                 >
+                   {source.metadata.domain || 'Local source'}
+                 </a>
+               )}
+             </div>
+             
+                
                   ))}
                 </div>
               </div>
