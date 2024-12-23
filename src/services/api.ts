@@ -2,7 +2,7 @@ import { Message, SourceDetail } from '../types/chat';
 
 // const AI_QUERY_API_URL = 'https://ai-query.onpointsoft.com/api';
 
-const AI_QUERY_API_URL = '/api/proxy'; // Change to proxy endpoint
+const AI_QUERY_API_URL = 'http://104.197.36.5:5001/api'; // Change to proxy endpoint
 
 interface AIQueryResponse {
   response: string;
